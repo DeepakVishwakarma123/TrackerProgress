@@ -8,7 +8,7 @@
 </head>
 <body class="grid place-content-center">
     <!-- nav bar seciton starts here -->
-    <div class="navbar bg-base-100 p-3 top-0 sticky z-[1] glass">
+    <div class="navbar bg-base-100 p-3 top-0 sticky z-[1] glass" id="nav">
         <div class="navbar-start">
           <div class="dropdown">
             <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
@@ -35,10 +35,10 @@
             </ul>
           </div>
           <a class="text-xl" href="google.com">
-            <img src="icons/progu-high-resolution-logo-transparent.png" alt="navbarlogo" width="140px">
+            <img id="logo" src="icons/progu-high-resolution-logo-transparent.png" alt="navbarlogo" width="140px">
          </a>
         </div>
-        <div class="navbar-center hidden lg:flex">
+        <div class="navbar-center hidden lg:flex" id="navlinks">
           <ul class="menu menu-horizontal px-1 gap-2">
             <li><a class="fontbold">Home</a></li>
             <li><a class="fontbold">Features</a></li>
@@ -46,7 +46,7 @@
             <li><a class="fontbold">Conatact Us</a></li>
           </ul>
         </div>
-        <div class="navbar-end gap-3">
+        <div class="navbar-end gap-3" id="buttondiv">
           <a class="btn btn-primary btn-outline md:rounded-full md:w-64">Get Started</a>
         </div>
       </div>
@@ -76,7 +76,7 @@
     </div>
   </div>
   <!-- third row -->
-   <div class="flex flex-col md:justify-center">
+   <div class="flex flex-col md:justify-center" id="hit">
   <div class="grid gap-5  md:grid-cols-3 p-5">
     <div class="card  shadow-xl border-primary border-[1.2px] bg-base-100 
     hover:scale-[1.03] transition-all duration-100">
@@ -86,7 +86,7 @@
           alt="Shoes"
           class="rounded-xl glass" width="50px"/>
       </figure>
-      <div class="card-body items-center text-center">
+      <div class="card-body items-center text-center" id="box1">
         <h2 class="card-title text-primary font-semibold">Improve Focus</h2>
         <p>Start Fousing Improve Productiviy make your life best and suitable for journey embeddin in your life</p>
       </div>
@@ -99,7 +99,7 @@
           alt="Shoes"
           class="rounded-xl glass" width="50px"/>
       </figure>
-      <div class="card-body items-center text-center">
+      <div class="card-body items-center text-center" id="box2">
         <h2 class="card-title text-primary font-semibold">Chase Goal</h2>
         <p>Start chasing Your Goal don,t hesitate you always can,t win so keep die trying and happy life</p>
       </div>
@@ -112,7 +112,7 @@
           alt="Shoes"
           class="rounded-xl glass" width="50px"/>
       </figure>
-      <div class="card-body items-center text-center">
+      <div class="card-body items-center text-center" id="box3">
         <h2 class="card-title text-primary font-semibold">Track Progress</h2>
         <p>Progress Doesn,t happen in one day so it will be part of consective days so keep doing every time</p>
       </div>
@@ -219,7 +219,7 @@
         </div>
      </div>
      <div class="flex justify-center p-10">
-      <button class="btn btn-primary rounded-full w-64 hover:scale-[1.1]"><a href="#">Explore More</a></button>
+      <button class="btn btn-primary rounded-full w-64 hover:scale-[1.1]" id="bottombtn"><a href="#">Explore More</a></button>
      </div>
     </div>
  <!-- benefit section ends here! -->
@@ -273,5 +273,8 @@
     </nav>
   </footer>
    <!-- footer section ends here! -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   <script src="animate.js"></script>
 </body>
 </html>
