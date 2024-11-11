@@ -11,6 +11,18 @@ let promise=renderSaveData(wantTorendercurrentElement)    //the promsie is used 
 
 consumePromise(promise)
 
+//a function which is used to itrate over the collections and to create a new arrays
+function doloopOnarray(elementArray,emptyElementArray,isLastElement)
+{         
+  if(isLastElement)
+  {
+    elementArray.forEach( element => emptyElementArray.push(element.lastElementChild))
+  }
+  else{
+    elementArray.forEach(element => emptyElementArray.push(element.firstElementChild))
+  }
+} 
+
 //currentPromise is used to track current Promsies
 function consumePromise(currentPromise)
 {
@@ -33,16 +45,6 @@ function consumePromise(currentPromise)
           let firstliElementArray=[]
           let mainContainerElementsArray=taskAddmainContainer.children
           let mainContinaerConvereted=Array.from(mainContainerElementsArray)
-          function doloopOnarray(elementArray,emptyElementArray,isLastElement)
-          {         
-            if(isLastElement)
-            {
-              elementArray.forEach( element => emptyElementArray.push(element.lastElementChild))
-            }
-            else{
-              elementArray.forEach(element => emptyElementArray.push(element.firstElementChild))
-            }
-          } 
           doloopOnarray(mainContinaerConvereted,lastElementChildsArray,true)
           doloopOnarray(lastElementChildsArray,ulElementsArray,true)
           doloopOnarray(ulElementsArray,lastliElementArray,true)
@@ -64,9 +66,12 @@ function consumePromise(currentPromise)
 function editTask()
 {
 // getting main parent element of top root
-let mainContainer=this.closest("#main") //the closest method is used 
-let gruoupButtons=`  
- <div class="flex col-span-2 gap-2">
+let mainContainer=this.parentElement.parentElement.parentElement
+let id=mainContainer.id
+console.log("id vlaue inside funcion edit task is",id)
+
+ //the closest method is used 
+let gruoupButtons=`<div class="flex col-span-2 gap-2">
                   <div>
                     <button class="btn btn-ghost rounded-full w-20 h-2" id="CancelButton">Cancel</button>
                    </div>
@@ -77,19 +82,57 @@ let gruoupButtons=`
 `
 let maintaskdiv=mainContainer.firstElementChild
 let paragraphTaskMain=maintaskdiv.firstElementChild
+let currentIndicator=paragraphTaskMain.children[0].textContent
 let taskDescriptionEleValue=paragraphTaskMain.lastElementChild.textContent
-paragraphTaskMain.remove()
-this.remove()
+let orginalDescriptionValue=taskDescriptionEleValue
+let indicatorAlreadyUsedin=paragraphTaskMain.firstElementChild.textContent
+let ulParentElementMain=this.parentElement.parentElement
+console.log("the ul parent element is",ulParentElementMain)
+paragraphTaskMain.style="display:none"
 let input=document.createElement("input")
 input.value=taskDescriptionEleValue
-input.classList.add('inputStyle')
-
 // add autofocus to above element and solve error
+input.classList.add('inputStyle')
+ulParentElementMain.style='display:none'
+mainContainer.insertAdjacentHTML("beforeend",gruoupButtons)
 maintaskdiv.append(input)
 console.log(input);
 console.log(maintaskdiv)
+// a array used to hold all cancel buttons intially empty
+let gruoupButtonsParent=mainContainer.lastElementChild
+console.log("groupbuttons",gruoupButtonsParent);
+
+let cancelButton=gruoupButtonsParent.firstElementChild.firstElementChild
+let saveButton=gruoupButtonsParent.lastElementChild.firstElementChild
+let mainElementsArray=[maintaskdiv,paragraphTaskMain,ulParentElementMain,gruoupButtonsParent,input]
+let ArrayForCancelFunciton=[maintaskdiv,paragraphTaskMain,orginalDescriptionValue,ulParentElementMain,gruoupButtonsParent,input]
+cancelButton.addEventListener('click',() => 
+  {
+  orginalState(ArrayForCancelFunciton,currentIndicator)
+}
+)
+saveButton.addEventListener('click',() => 
+  { 
+    console.log("this value is can this is",this);
+    
+    console.log("id while calling funion",id);
+   modifyDataindb(id,input.value,mainElementsArray)
+}
+)
 }
 
+function orginalState(arrayOfmyElements,indicator)
+{
+const [maintaskdiv,paragraphElefordescription,orginalDescriptionValue,ulmainParent,groupbuttonsMainDiv,inputFieldUpdate]=arrayOfmyElements
+const [emojiparagraph,taskParagraph]=Array.from(paragraphElefordescription.children)
+taskParagraph.textContent=orginalDescriptionValue
+emojiparagraph.textContent=indicator
+paragraphElefordescription.append(emojiparagraph,taskParagraph)
+paragraphElefordescription.style="dispaly:block"
+ulmainParent.style="display:block"
+groupbuttonsMainDiv.style="display:none"
+inputFieldUpdate.remove()
+}
 
 //element creation in global scopes
 let editDeleteMenu=`<div class="dropdown dropdown-left col-span-1 flex justify-center  items-center">
@@ -122,12 +165,11 @@ let taskAddmainContainer=document.getElementById("taskAdded")
 
 let imagesElement=taskAddmainContainer.firstElementChild
 
-
-
 // array to store used indicator as task icons
 let usedIndicator=[]
 function addtask()
 {
+
 // let,s check whether the field is empty or not
 if(inputArea.value!=="" && inputArea.value.length>0 && inputArea.value.length<=400)                                                                                        
 {     
@@ -146,7 +188,7 @@ if(inputArea.value!=="" && inputArea.value.length>0 && inputArea.value.length<=4
          
          saveTaskinfoindb(description,chosedIndicator)
          //passigg current element indicating variable
-         let promiseonAddingTask=renderSaveData(wantTorendercurrentElement)
+         let promiseonAddingTask=renderSaveData(wantTorendercurrentElement) //as promise state can be changed
          consumePromise(promiseonAddingTask)
         }
         else{
@@ -168,16 +210,11 @@ function createElement(arrayOfTask,isRenderWholeorCurrnet)
       //intilly we have to get first element
       if(arrayOfTask.length===1)
       {
-        //getting first element
-        console.log("reffering to the first element");
-        
         let firstElementData=arrayOfTask[0]
         generateElements(firstElementData)
       }
       //we need always last element
       else{
-        console.log("refferitn to the last elemlen");
-        
         let lastElementData=arrayOfTask[arrayOfTask.length-1]
         generateElements(lastElementData)
       }
@@ -199,6 +236,7 @@ function createElement(arrayOfTask,isRenderWholeorCurrnet)
   // funciton for saving data in task store through indexdb
 function saveTaskinfoindb(description,indicator)
 { 
+
   let request=indexedDB.open("Trackdatabase",5)
   request.onsuccess=(e) =>
     { 
@@ -236,7 +274,7 @@ function renderSaveData(renderDataDecider)
                  createElement(allTaskDataarray,renderDataDecider)
                  resolve("all elements are rendered with array data")
                  console.log("test");
-                 
+                 console.log(allTaskDataarray);
              }
              getAllrequest.onerror=(e) =>
               {  
@@ -254,15 +292,55 @@ function renderSaveData(renderDataDecider)
 
 // element to add for toggle 
 
+function modifyDataindb(id,description,arrayrofElements)
+ {  
+  let request=indexedDB.open("Trackdatabase",5)
+  request.onsuccess=(e) =>{
+    db=e.target.result
+    let trasactionObject=db.transaction("Taskstore","readwrite")
+    let taskStoreAccess=trasactionObject.objectStore("Taskstore")
+    db.onerror=(e) => console.log("error at db level",e)
+    let convertedId=Number(id)
+    // changing datatype of id to number from string
+    let getRequest=taskStoreAccess.get(convertedId)
+    getRequest.onsuccess=(e) =>
+    { 
+      console.log("something is happen");
+     let taskobject=e.target.result
+     taskobject.taskDescription=description
+     let putrequest=taskStoreAccess.put(taskobject)
+     putrequest.onsuccess=(e) => console.log("data get puts",e)
+     putrequest.onerror=(e) => console.log("data get error whiele putting",e)
+     reverseThestate(arrayrofElements,taskobject.taskIndicator)
+    }
+    getRequest.onerror=(e) => console.log("errro occured at get request");
+  }
+}
 
+
+//revert the state of elements to which data should have to rerender
+function reverseThestate(elementcollection,indicator)
+{
+const [maintaskdiv,paragraphElefordescription,ulmainParent,groupbuttonsMainDiv,inputFieldUpdate]=elementcollection
+const [emojiparagraph,taskParagraph]=Array.from(paragraphElefordescription.children)
+console.log(maintaskdiv.children);
+taskParagraph.textContent=inputFieldUpdate.value
+emojiparagraph.textContent=indicator
+paragraphElefordescription.append(emojiparagraph,taskParagraph)
+paragraphElefordescription.style="dispaly:block"
+ulmainParent.style="display:block"
+groupbuttonsMainDiv.style="display:none"
+console.log(groupbuttonsMainDiv);
+inputFieldUpdate.remove()
+}
 
 function generateElements(taskobject)
 { 
-  console.log("the code reached here");
+  console.log("the task id is this so why you don,t figure out it",taskobject.Taskid);
   
   taskAddmainContainer.classList.add("gridontaskadd")
   let mainParent=document.createElement("div")
-  mainParent.id="main"
+  mainParent.id=`${taskobject.Taskid}`
   let mytaskdiv=document.createElement("div")
   let paragraph=document.createElement("p")
   let taskParagraph=document.createElement("p")
@@ -279,7 +357,6 @@ function generateElements(taskobject)
   taskAddmainContainer.insertAdjacentElement("beforeend",mainParent)                                                                                                                                                                                                                                                               
   usedIndicator.push(taskobject.taskIndicator)
 }
-// function getElementId's
 
 
 addTaskButton.addEventListener('click',addtask)
