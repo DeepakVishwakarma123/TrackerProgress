@@ -34,7 +34,7 @@ function consumePromise(currentPromise)
         //  don,t add events if there is no elements
         //intially we have just one image
         console.log(taskAddmainContainer.children.length)
-        if(taskAddmainContainer.children.length===1 && taskAddmainContainer.firstElementChild==="img")
+        if(taskAddmainContainer.children.length===1 && taskAddmainContainer.firstElementChild===taskAddmainContainer.firstElementChild)
         {
          console.log("don,t add events to edit and delete buttons");
         }
@@ -55,7 +55,7 @@ function consumePromise(currentPromise)
             editButton =>editButton.addEventListener('click',editTask)
           )
           lastliElementArray.forEach(
-            editButton =>editButton.addEventListener('click',() =>alert("pressed button is delete",this))
+            editButton =>editButton.addEventListener('click',deleteTaskMain)
           )
         }
     }
@@ -63,68 +63,134 @@ function consumePromise(currentPromise)
   )
 }
 
+
+function getElementReference()
+{ 
+  let mainContainer=this.parentElement.parentElement.parentElement
+  let id=mainContainer.id
+  console.log("id vlaue inside funcion edit task is",id)
+  
+   //the closest method is used 
+  let gruoupButtons=`<div class="flex col-span-2 gap-2">
+                    <div>
+                      <button class="btn btn-ghost rounded-full w-20 h-2" id="CancelButton">Cancel</button>
+                     </div>
+                     <div> 
+                      <button class="btn btn-primary btn-outline w-36 rounded-full" id="TaskaddButton">Save</button>
+                     </div>
+                   </div>
+  `
+  let maintaskdiv=mainContainer.firstElementChild
+  let paragraphTaskMain=maintaskdiv.firstElementChild
+  let currentIndicator=paragraphTaskMain.children[0].textContent
+  let taskDescriptionEleValue=paragraphTaskMain.lastElementChild.textContent
+  let orginalDescriptionValue=taskDescriptionEleValue
+  let indicatorAlreadyUsedin=paragraphTaskMain.firstElementChild.textContent
+  let ulParentElementMain=this.parentElement.parentElement
+  console.log("the ul parent element is",ulParentElementMain)
+  paragraphTaskMain.style="display:none"
+  let input=document.createElement("input")
+  input.value=taskDescriptionEleValue
+  // add autofocus to above element and solve error
+  input.classList.add('inputStyle')
+  ulParentElementMain.style='display:none'
+  mainContainer.insertAdjacentHTML("beforeend",gruoupButtons)
+  maintaskdiv.append(input)
+  console.log(input);
+  console.log(maintaskdiv)
+  // a array used to hold all cancel buttons intially empty
+  let gruoupButtonsParent=mainContainer.lastElementChild
+  console.log("groupbuttons",gruoupButtonsParent);
+  
+  let cancelButton=gruoupButtonsParent.firstElementChild.firstElementChild
+  let saveButton=gruoupButtonsParent.lastElementChild.firstElementChild
+  let mainElementsArray=[maintaskdiv,paragraphTaskMain,ulParentElementMain,gruoupButtonsParent,input]
+  let ArrayForCancelFunciton=[maintaskdiv,paragraphTaskMain,orginalDescriptionValue,ulParentElementMain,gruoupButtonsParent,input]
+  if(this.textContent==='edit')
+    {
+      cancelButton.addEventListener('click',() => 
+       {
+       orginalState(ArrayForCancelFunciton,currentIndicator)
+     }
+     )
+     saveButton.addEventListener('click',() => 
+       { 
+         console.log("this value is can this is");
+         
+         console.log("id while calling funion",id);
+        modifyDataindb(id,input.value,mainElementsArray)
+     }
+    ) 
+    }
+    else{
+        
+      //changin button to delete
+      input.remove()
+      saveButton.textContent='delete'
+      ulParentElementMain.style='display:none'
+const [maintaskdiv,paragraphElefordescription,orginalDescriptionValue,ulmainParent,groupbuttonsMainDiv,inputFieldUpdate]=ArrayForCancelFunciton
+const [emojiparagraph,taskParagraph]=Array.from(paragraphElefordescription.children)
+taskParagraph.textContent=orginalDescriptionValue
+emojiparagraph.textContent=currentIndicator
+paragraphElefordescription.append(emojiparagraph,taskParagraph)
+paragraphElefordescription.style="dispaly:block"
+
+        cancelButton.addEventListener('click',() => 
+          {
+           orginalState(ArrayForCancelFunciton,currentIndicator)
+        }
+        )
+        saveButton.addEventListener('click',() => 
+          {
+            deleteTask(id,mainContainer)
+        }
+       ) 
+
+    }  
+  
+}
+
 function editTask()
 {
-// getting main parent element of top root
-let mainContainer=this.parentElement.parentElement.parentElement
-let id=mainContainer.id
-console.log("id vlaue inside funcion edit task is",id)
-
- //the closest method is used 
-let gruoupButtons=`<div class="flex col-span-2 gap-2">
-                  <div>
-                    <button class="btn btn-ghost rounded-full w-20 h-2" id="CancelButton">Cancel</button>
-                   </div>
-                   <div> 
-                    <button class="btn btn-primary btn-outline w-36 rounded-full" id="TaskaddButton">Save</button>
-                   </div>
-                 </div>
-`
-let maintaskdiv=mainContainer.firstElementChild
-let paragraphTaskMain=maintaskdiv.firstElementChild
-let currentIndicator=paragraphTaskMain.children[0].textContent
-let taskDescriptionEleValue=paragraphTaskMain.lastElementChild.textContent
-let orginalDescriptionValue=taskDescriptionEleValue
-let indicatorAlreadyUsedin=paragraphTaskMain.firstElementChild.textContent
-let ulParentElementMain=this.parentElement.parentElement
-console.log("the ul parent element is",ulParentElementMain)
-paragraphTaskMain.style="display:none"
-let input=document.createElement("input")
-input.value=taskDescriptionEleValue
-// add autofocus to above element and solve error
-input.classList.add('inputStyle')
-ulParentElementMain.style='display:none'
-mainContainer.insertAdjacentHTML("beforeend",gruoupButtons)
-maintaskdiv.append(input)
-console.log(input);
-console.log(maintaskdiv)
-// a array used to hold all cancel buttons intially empty
-let gruoupButtonsParent=mainContainer.lastElementChild
-console.log("groupbuttons",gruoupButtonsParent);
-
-let cancelButton=gruoupButtonsParent.firstElementChild.firstElementChild
-let saveButton=gruoupButtonsParent.lastElementChild.firstElementChild
-let mainElementsArray=[maintaskdiv,paragraphTaskMain,ulParentElementMain,gruoupButtonsParent,input]
-let ArrayForCancelFunciton=[maintaskdiv,paragraphTaskMain,orginalDescriptionValue,ulParentElementMain,gruoupButtonsParent,input]
-cancelButton.addEventListener('click',() => 
-  {
-  orginalState(ArrayForCancelFunciton,currentIndicator)
+//calling getRefrence funtion
+getElementReference.call(this)
 }
-)
-saveButton.addEventListener('click',() => 
-  { 
-    console.log("this value is can this is",this);
+
+function deleteTaskMain()
+{
+  getElementReference.call(this)
+}
+
+function deleteTask(id,mainContainer)
+{
+  let request=indexedDB.open("Trackdatabase",5)
+  request.onsuccess=(e) =>{
+    db=e.target.result
+    let trasactionObject=db.transaction("Taskstore","readwrite")
+    let taskStoreAccess=trasactionObject.objectStore("Taskstore")
+    db.onerror=(e) => console.log("error at db level",e)
+    let convertedId=Number(id)
+    console.log("the id is",convertedId);
     
-    console.log("id while calling funion",id);
-   modifyDataindb(id,input.value,mainElementsArray)
-}
-)
+    // changing datatype of id to number from string
+    let deleteRequest=taskStoreAccess.delete(convertedId)
+    deleteRequest.onsuccess=(e) =>
+    { 
+      console.log("data is deleted and that is this",e.target.result)
+      mainContainer.remove()
+    }
+    deleteRequest.onerror=(e) => console.log("errro occured at delete request")
+  }
+  request.onerror=(e) => console.log('errror happen');
+  
 }
 
 function orginalState(arrayOfmyElements,indicator)
 {
 const [maintaskdiv,paragraphElefordescription,orginalDescriptionValue,ulmainParent,groupbuttonsMainDiv,inputFieldUpdate]=arrayOfmyElements
 const [emojiparagraph,taskParagraph]=Array.from(paragraphElefordescription.children)
+console.log("orignina ldescriopto vale",orginalDescriptionValue);
+
 taskParagraph.textContent=orginalDescriptionValue
 emojiparagraph.textContent=indicator
 paragraphElefordescription.append(emojiparagraph,taskParagraph)
@@ -133,6 +199,8 @@ ulmainParent.style="display:block"
 groupbuttonsMainDiv.style="display:none"
 inputFieldUpdate.remove()
 }
+
+
 
 //element creation in global scopes
 let editDeleteMenu=`<div class="dropdown dropdown-left col-span-1 flex justify-center  items-center">
@@ -357,6 +425,5 @@ function generateElements(taskobject)
   taskAddmainContainer.insertAdjacentElement("beforeend",mainParent)                                                                                                                                                                                                                                                               
   usedIndicator.push(taskobject.taskIndicator)
 }
-
 
 addTaskButton.addEventListener('click',addtask)
