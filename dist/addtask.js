@@ -29,13 +29,12 @@ function consumePromise(currentPromise)
   currentPromise.then(
     (data) =>
     {    
-        console.log("that is a data",data);
-      
-        //  don,t add events if there is no elements
-        //intially we have just one image
-        console.log(taskAddmainContainer.children.length)
-        if(taskAddmainContainer.children.length===1 && taskAddmainContainer.firstElementChild===taskAddmainContainer.firstElementChild)
-        {
+          
+         
+        if(taskAddmainContainer.children.length===1 && taskAddmainContainer.firstElementChild.tagName==='IMG')
+        {                                                                                                           
+          console.log(taskAddmainContainer.firstElementChild);
+          
          console.log("don,t add events to edit and delete buttons");
         }
         else{
