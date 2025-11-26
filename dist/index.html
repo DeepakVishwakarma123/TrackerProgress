@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Progress Tracker</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <!-- main section task creation menu -->
+     <div class="grid grid-cols-2 gap-5 p-8">
+        <div>
+    <div class="mb-5">
+      <label for="number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter Days For Progress Tracker</label>
+      <input type="number" id="dayInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2" placeholder="add days"/>
+      <select class="selectDays">
+        <option>Weekly</option>
+        <option>Monthly</option>
+        <option>Yearly</option>
+      </select>
+    </div>
+    <div class="flex items-start mb-5 flex-col bg-gray-200">
+       <p class="font-semibold text-2xl" id="head"> Remaining Days In Year</p>
+       <p class="font-semibold text-2xl" id="DayIndicator">45</p>
+    </div>
+    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" id="daySubmitButton">Submit</button>
+  </div>
+  <!-- task creation sections -->
+   <div id="taskMainContainer" class="grid gap-5">
+    
+     <!-- enter sectin task for user -->
+     <div class="" id="Taskentersection">
+        <!-- main div -->
+        <div class="grid gap-3">
+           <div id="inputArea" class="flex">
+             <input type="text" id="inputTaskarea" placeholder="Add a task for following " class="focus:outline-none
+             border-[0.5px] border-black 
+             border-l-0 border-t-0 border-r-0 
+             focus:border-[2px] focus:border-l-0 
+             focus:border-r-0  focus:border-t-0 w-full">
+             <p class="text-xl font-semibold badge-secondary rounded-full p-2" id="choosedDay">Day:</p>
+           </div>
+            <div id="activeMenuonFocus" class="hidden">
+               <!-- non equl layout container -->
+               <div class="grid grid-cols-6">
+                <!-- indicator sectino -->
+                <div id="indicatorSection" class="col-span-4">
+                    <button class="btn m-1 rounded-full" id="trigger">🙂</button>
+                </div>
+                <!-- group buttons  -->
+                 <div class="flex col-span-2 gap-2">
+                  <div>
+                    <button class="btn btn-ghost rounded-full w-20 h-2" id="CancelButton">Cancel</button>
+                   </div>
+                   <div> 
+                    <button class="btn btn-primary btn-outline w-36 rounded-full" id="TaskaddButton">Task Add</button>
+                   </div>
+                 </div>
+                 <!-- ---- -->
+               </div>
+            </div>
+        </div>
+     </div>
+     <div id="taskAdded" class="gridonparent">
+      <img src="imagesDashboard/Animation - 1730331769315.gif" alt="no task image"  class="object-cover">
+   </div>
+   </div>
+  </div>
+  <div class="p-2">
+   <button class="btn-primary btn w-full rounded-2xl p-2">Go to DashBoard</button>
+  </div>  
+  
+  <!-- <script src="emoji.js" type="module"></script> -->
+  <script src="focus.js" type="module"></script>
+  <script src="addtask.js" type="module"></script>
+  <script src="dayChoose.js" type="module"></script>
+  <script src="indexdb.js" type="module"></script>
+</body>
+</html>
