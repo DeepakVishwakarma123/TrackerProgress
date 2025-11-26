@@ -1,0 +1,43 @@
+let tl=gsap.timeline()
+tl.from("#logo",{
+      x:-600,     
+    duration:1,
+})
+tl.from("#navlinks",{
+      y:-100,     
+    duration:1,
+})
+tl.from("#buttondiv",{
+      x:600,     
+    duration:1,
+})
+gsap.from(
+  "#box1",
+  {
+    opacity:0,
+    x:40000,
+    duration:2,
+    delay:1,
+    scrollTrigger:{
+      trigger:"#box1",
+      scroller:"body",
+      markers:true,
+      start:"top 80%",
+      end:"top 60%",
+      scrub:2
+    }
+  }
+)
+gsap.from(
+  "#bottombtn",
+  {
+    scale:0,
+    duration:2,
+    scrollTrigger:{
+      trigger:"#bottombtn",
+      scroller:"body",
+      markers:true
+    }
+  }
+)
+console.log(this);
